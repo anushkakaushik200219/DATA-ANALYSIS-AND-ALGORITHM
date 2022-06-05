@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+bool visited[100000];
+
+bool dfs(int start, int end,vector<int>adj[],int n)
+{
+    if (start == end)
+        return true;
+    visited[start] = 1;
+    for (auto x : adj[start]) {
+        if (!visited[x])
+            if (dfs(x, end,adj,n))
+                return true;
+    }
+    return false;
+}
+int main()
+{
+    int n,m;
+    cin>>n>>m;
+    int adj[n+1][n+1];
+    cout << "Hello world!" << endl;
+    for(int i=1;i<n+1;i++)
+    {
+        for(int j=1;j<n+1;j++)
+        adj[i][j]=0;
+    }
+    for(int i=0;i<m;i++)
+    {
+        int u,v;
+        cin>>u>>v;
+
+        adj[u][v]=1;
+    }
+    cout << "Hello world!" << endl;
+    for(int i=1;i<n+1;i++)
+    {
+        for(int j=1;j<n+1;j++)
+          cout<<adj[i][j]<<" ";
+       cout<<endl;
+    }
+     vector<int>l[n+1];
+     for(int i=1;i<n+1;i++)
+    {
+        for(int j=1;j<n+1;j++)
+        {
+           if(adj[i][j]==1)
+             l[i].push_back(j);
+        }
+    }
+    for(int i=1;i<n+1;i++)
+    {
+        cout<<i;
+        for(auto j:l[i])//=adj[i].begin();j!=adj[i].end();j++)
+        {
+           cout<<"->"<<j;
+        }
+        cout<<endl;
+    }
+
+    int x,y;
+    cin>>x>>y;
+
+    if(dfs(x,y,l,n))
+        cout << "Yes Path Exists";
+    else
+        cout << "No Such Path Exists'.";
+    return 0;
+}
