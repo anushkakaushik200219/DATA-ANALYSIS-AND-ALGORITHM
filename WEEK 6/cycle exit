@@ -1,0 +1,71 @@
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+set<int>white;//white container
+set<int>grey;//grey container
+set<int>black;//black container
+int flag=0;
+void edge(vector<int>adj[],int u,int v){
+  adj[u].push_back(v);
+}
+//function to detect the cycle in graph
+void CycleDetect(int u,vector<int>adj[],int n){
+    white.erase(u);//remove from the white set
+    grey.insert(u);//put into the grey set
+    for(int i=0;i<adj[u].size();i++){
+      if(white.find(adj[u][i])!=white.end())
+      {
+      CycleDetect(adj[u][i],adj,n);
+        }
+      if(grey.find(adj[u][i])!=grey.end()){ //check if its is present or not in grey set
+        flag=1;
+      }
+    }
+    black.insert(u);//put into the black set
+    grey.erase(u);//remove from the grey set
+}
+int main(){
+   int n,m;
+    cin>>n>>m;
+    int mat[n+1][n+1];
+     vector<int>adj[n+1];
+    cout << endl;
+    for(int i=1;i<n+1;i++)
+    {
+        for(int j=1;j<n+1;j++)
+        mat[i][j]=0;
+    }
+    for(int i=0;i<m;i++)
+    {
+        int u,v;
+        cin>>u>>v;
+
+        mat[u][v]=1;
+        edge(adj,u,v);
+    }
+    cout << "MATRIX" << endl;
+    for(int i=1;i<n+1;i++)
+    {
+        for(int j=1;j<n+1;j++)
+          cout<<mat[i][j]<<" ";
+       cout<<endl;
+    }
+    cout << "LIST" << endl;
+    for(int i=1;i<n+1;i++)
+    {
+        cout<<i;
+        for(auto j:adj[i])//=adj[i].begin();j!=adj[i].end();j++)
+        {
+           cout<<"->"<<j;
+        }
+        cout<<endl;
+    }
+  for(int i=1;i<n+1;i++){
+    white.insert(i);
+  }
+  CycleDetect(0,adj,n+1);
+  if(flag==0)cout<<"No Graph Exists"<<endl;
+  else
+  cout<<"Yes Graph Exists"<<endl;
+  return 0;
+}
