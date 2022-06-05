@@ -1,0 +1,82 @@
+#include<iostream>
+#include<climits>
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n,m;
+    cin>>n>>m;
+    int adj[n+1][n+1];
+    vector<pair<int,int>>g[n+1];
+    cout << "Hello world!" << endl;
+    for(int i=1;i<n+1;i++)
+    {
+        for(int j=1;j<n+1;j++)
+        adj[i][j]=0;
+    }
+    for(int i=0;i<m;i++)
+    {
+        int u,v,w;
+        cin>>u>>v>>w;
+
+        adj[u][v]=w;
+        g[u].push_back(make_pair(v,w));
+    }
+    cout << "MATRIX" << endl;
+    for(int i=1;i<n+1;i++)
+    {
+        for(int j=1;j<n+1;j++)
+          cout<<adj[i][j]<<" ";
+       cout<<endl;
+    }
+
+    int source;
+    cout << "LIST" << endl;
+    for(int i=1;i<n+1;i++)
+    {
+        cout<<i;
+        for(auto j=g[i].begin();j!=g[i].end();j++)//:adj[i])
+        {
+           cout<<"->"<<j->first<<"wt-"<<j->second;
+        }
+        cout<<endl;
+    }
+
+
+    cin>>source;
+
+    priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;
+    vector<int>distTo(n+1,INT_MAX);
+
+    distTo[source]=0;
+    pq.push(make_pair(0,source));
+
+    while(!pq.empty())
+    {
+        int dist=pq.top().first;
+        int prev=pq.top().second;
+        pq.pop();
+
+        vector<pair<int,int>>::iterator it;
+        for(it=g[prev].begin();it!=g[prev].end();it++)
+        {
+            int next=it->first;
+            int nextDist=it->second;
+            if(distTo[next]>distTo[prev]+nextDist)
+            {
+               distTo[next]=distTo[prev]+nextDist;
+               pq.push(make_pair(distTo[next],next));
+               cout<<distTo[next]<<" ";
+            }
+             cout<<endl;
+        }
+    }
+    cout<<"the distance from sourse, "<<source<<", are :\n";
+    for(int i=1;i<=n;i++)
+        cout<<distTo[i]<<" ";
+    cout<<"\n";
+
+    return 0;
+}
+
